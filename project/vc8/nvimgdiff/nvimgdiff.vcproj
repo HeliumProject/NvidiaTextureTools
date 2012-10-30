@@ -23,6 +23,7 @@
 			OutputDirectory="$(ConfigurationName)\$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(SolutionDir)\nvtt.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -43,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;..\..\..\src;..\..\..\gnuwin32\include"
+				AdditionalIncludeDirectories="..;..\..\..\src;..\..\..\extern\gnuwin32\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;NVTT_SHARED;__SSE2__;__SSE__;__MMX__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,10 +65,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libpng.lib jpeg.lib tiff.lib"
+				AdditionalDependencies="FreeImage.lib jpeg.lib libpng.lib tiff.lib zlib.lib"
 				OutputFile="$(SolutionDir)\$(ConfigurationName).$(PlatformName)\bin\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\..\gnuwin32\lib"
+				AdditionalLibraryDirectories="$(GnuWinDir)\lib;$(FreeImageDir)"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -102,6 +103,7 @@
 			OutputDirectory="$(ConfigurationName)\$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(SolutionDir)\nvtt.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -146,7 +148,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(SolutionDir)\$(ConfigurationName).$(PlatformName)\bin\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\..\gnuwin32\lib"
+				AdditionalLibraryDirectories="..\..\..\extern\gnuwin32\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="17"
@@ -181,6 +183,7 @@
 			OutputDirectory="$(ConfigurationName)\$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(SolutionDir)\nvtt.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -201,7 +204,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;..\..\..\src;..\..\..\gnuwin32\include"
+				AdditionalIncludeDirectories="..;..\..\..\src;..\..\..\extern\gnuwin32\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;NVTT_SHARED;__SSE2__;__SSE__;__MMX__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -220,10 +223,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libpng.lib jpeg.lib tiff.lib"
+				AdditionalDependencies="FreeImage.lib jpeg.lib libpng.lib tiff.lib zlib.lib"
 				OutputFile="$(SolutionDir)\$(ConfigurationName).$(PlatformName)\bin\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\..\gnuwin32\lib"
+				AdditionalLibraryDirectories="$(GnuWinDir)\lib;$(FreeImageDir)"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -260,6 +263,7 @@
 			OutputDirectory="$(ConfigurationName)\$(PlatformName)"
 			IntermediateDirectory="$(ConfigurationName)\$(PlatformName)"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(SolutionDir)\nvtt.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -301,7 +305,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(SolutionDir)\$(ConfigurationName).$(PlatformName)\bin\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\..\gnuwin32\lib"
+				AdditionalLibraryDirectories="..\..\..\extern\gnuwin32\lib"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

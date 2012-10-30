@@ -1,4 +1,5 @@
-// Copyright NVIDIA Corporation 2008 -- Ignacio Castano <icastano@nvidia.com>
+// Copyright (c) 2009-2011 Ignacio Castano <castano@gmail.com>
+// Copyright (c) 2007-2009 NVIDIA Corporation -- Ignacio Castano <icastano@nvidia.com>
 // 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -26,6 +27,8 @@
 
 #include <nvimage/nvimage.h>
 
+#include <nvmath/Color.h>
+
 namespace nv
 {
 	struct ColorBlock;
@@ -38,11 +41,15 @@ namespace nv
 	namespace OptimalCompress
 	{
 		void compressDXT1(Color32 rgba, BlockDXT1 * dxtBlock);
-		void compressDXT1a(Color32 rgba, BlockDXT1 * dxtBlock);
+		void compressDXT1a(Color32 rgba, uint alphaMask, BlockDXT1 * dxtBlock);
+		void compressDXT1G(uint8 g, BlockDXT1 * dxtBlock);
 		
 		void compressDXT1G(const ColorBlock & rgba, BlockDXT1 * block);
 		void compressDXT3A(const ColorBlock & rgba, AlphaBlockDXT3 * dxtBlock);
 		void compressDXT5A(const ColorBlock & rgba, AlphaBlockDXT5 * dxtBlock);
+
+        void compressDXT1_Luma(const ColorBlock & rgba, BlockDXT1 * block);
+
 	}
 } // nv namespace
 

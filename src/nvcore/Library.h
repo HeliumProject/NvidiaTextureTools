@@ -1,9 +1,10 @@
 // This code is in the public domain -- castano@gmail.com
 
+#pragma once
 #ifndef NV_CORE_LIBRARY_H
 #define NV_CORE_LIBRARY_H
 
-#include <nvcore/nvcore.h>
+#include "nvcore.h"
 
 #if NV_OS_WIN32
 #define LIBRARY_NAME(name)	#name ".dll"

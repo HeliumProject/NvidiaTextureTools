@@ -21,16 +21,17 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-#include <nvcore/StrLib.h>
-#include <nvcore/StdStream.h>
-
-#include <nvmath/Color.h>
-
-#include <nvimage/Image.h>
-#include <nvimage/ImageIO.h>
-#include <nvimage/DirectDrawSurface.h>
-
 #include "cmdline.h"
+
+#include "nvimage/Image.h"
+#include "nvimage/ImageIO.h"
+#include "nvimage/DirectDrawSurface.h"
+
+#include "nvmath/Color.h"
+
+#include "nvcore/Array.inl"
+#include "nvcore/StrLib.h"
+#include "nvcore/StdStream.h"
 
 // @@ Add decent error messages.
 // @@ Add option to resize images.
@@ -114,7 +115,7 @@ int main(int argc, char *argv[])
 
 	for (uint i = 0; i < imageCount; i++)
 	{
-		if (!images[i].load(files[i]))
+		if (!images[i].load(files[i].str()))
 		{
 			printf("*** error loading file\n");
 			return 1;
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
 	}
 	
 	
-	nv::StdOutputStream stream(output);
+	nv::StdOutputStream stream(output.str());
 	if (stream.isError()) {
 		printf("Error opening '%s' for writting\n", output.str());
 		return 1;

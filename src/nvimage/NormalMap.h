@@ -21,12 +21,14 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
+#pragma once
 #ifndef NV_IMAGE_NORMALMAP_H
 #define NV_IMAGE_NORMALMAP_H
 
-#include <nvmath/Vector.h>
-#include <nvimage/nvimage.h>
-#include <nvimage/FloatImage.h>
+#include "nvimage.h"
+#include "FloatImage.h"
+
+#include "nvmath/Vector.h"
 
 
 namespace nv
@@ -41,9 +43,11 @@ namespace nv
 		NormalMapFilter_Sobel9x9,	// very large
 	};
 
+	// @@ These two functions should be deprecated:
 	FloatImage * createNormalMap(const Image * img, FloatImage::WrapMode wm, Vector4::Arg heightWeights, NormalMapFilter filter = NormalMapFilter_Sobel3x3);
-
 	FloatImage * createNormalMap(const Image * img, FloatImage::WrapMode wm, Vector4::Arg heightWeights, Vector4::Arg filterWeights);
+
+	FloatImage * createNormalMap(const FloatImage * img, FloatImage::WrapMode wm, Vector4::Arg filterWeights);
 
 	void normalizeNormalMap(FloatImage * img);
 

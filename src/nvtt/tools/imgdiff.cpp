@@ -21,19 +21,19 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-#include <nvcore/StrLib.h>
-#include <nvcore/StdStream.h>
-#include <nvcore/Containers.h>
+#include "cmdline.h"
 
-#include <nvimage/Image.h>
-#include <nvimage/DirectDrawSurface.h>
+#include "nvmath/Color.h"
+#include "nvmath/Vector.inl"
 
-#include <nvmath/Color.h>
-#include <nvmath/Vector.h>
+#include "nvimage/Image.h"
+#include "nvimage/DirectDrawSurface.h"
+
+#include "nvcore/StrLib.h"
+#include "nvcore/StdStream.h"
 
 #include <math.h>
 
-#include "cmdline.h"
 
 static bool loadImage(nv::Image & image, const char * fileName)
 {
@@ -61,7 +61,6 @@ static bool loadImage(nv::Image & image, const char * fileName)
 	return true;
 }
 
-// @@ Compute per-tile errors.
 struct Error
 {
 	Error()
@@ -72,11 +71,12 @@ struct Error
 		mse = 0.0f;
 	}
 
-	void addSample(float e)
+    // @@ This has poor precision...
+	void addSample(double e)
 	{
 		samples++;
-		mabse += fabsf(e);
-		maxabse = nv::max(maxabse, fabsf(e));
+		mabse += fabs(e);
+		maxabse = nv::max(maxabse, fabs(e));
 		mse += e * e;
 	}
 
@@ -84,24 +84,25 @@ struct Error
 	{
 		mabse /= samples;
 		mse /= samples;
-		rmse = sqrtf(mse);
-		psnr = (rmse == 0) ? 999.0f : 20.0f * log10(255.0f / rmse);
+		rmse = sqrt(mse);
+		psnr = (rmse == 0) ? 999.0 : 20.0 * log10(255.0 / rmse);
 	}
 
 	void print()
 	{
 		printf("  Mean absolute error: %f\n", mabse);
 		printf("  Max absolute error: %f\n", maxabse);
+        printf("  Mean squared error: %f\n", mse);
 		printf("  Root mean squared error: %f\n", rmse);
 		printf("  Peak signal to noise ratio in dB: %f\n", psnr);
 	}
 
 	int samples;
-	float mabse;
-	float maxabse;
-	float mse;
-	float rmse;
-	float psnr;
+	double mabse;
+	double maxabse;
+	double mse;
+	double rmse;
+	double psnr;
 };
 
 struct NormalError
@@ -123,7 +124,7 @@ struct NormalError
 		vc = nv::normalize(2.0f * (vc / 255.0f) - 1.0f);
 
 		ade += acosf(nv::clamp(dot(vo, vc), -1.0f, 1.0f));
-		mse += length_squared((vo - vc) * (255 / 2.0f));
+		mse += lengthSquared((vo - vc) * (255 / 2.0f));
 		
 		samples++;
 	}
@@ -152,6 +153,13 @@ struct NormalError
 	float rmse;
 	float psnr;
 };
+
+static float luma(const nv::Color32 & c) {
+    return 0.299f * float(c.r) + 0.587f * float(c.g) + 0.114f * float(c.b);
+    //return 0.25f * float(c.r) + 0.5f * float(c.g) + 0.25f * float(c.b);
+    //return 0.333f * float(c.r) + 0.334f * float(c.g) + 0.333f * float(c.b);
+    //return 0.1f * float(c.r) + 0.8f * float(c.g) + 0.1f * float(c.g);
+}
 
 
 int main(int argc, char *argv[])
@@ -205,8 +213,8 @@ int main(int argc, char *argv[])
 	}
 
 	nv::Image image0, image1;
-	if (!loadImage(image0, input0)) return 0;
-	if (!loadImage(image1, input1)) return 0;
+	if (!loadImage(image0, input0.str())) return 0;
+	if (!loadImage(image1, input1.str())) return 0;
 
 	const uint w0 = image0.width();
 	const uint h0 = image0.height();
@@ -220,6 +228,7 @@ int main(int argc, char *argv[])
 	Error error_g;
 	Error error_b;
 	Error error_a;
+    Error error_luma;
 	Error error_total;
 	NormalError error_normal;
 
@@ -230,32 +239,31 @@ int main(int argc, char *argv[])
 			const nv::Color32 c0(image0.pixel(e, i));
 			const nv::Color32 c1(image1.pixel(e, i));
 
-			float r = float(c0.r - c1.r);
-			float g = float(c0.g - c1.g);
-			float b = float(c0.b - c1.b);
-			float a = float(c0.a - c1.a);
-
+			double r = float(c0.r - c1.r);
+			double g = float(c0.g - c1.g);
+			double b = float(c0.b - c1.b);
+			double a = float(c0.a - c1.a);
+            
 			error_r.addSample(r);
 			error_g.addSample(g);
 			error_b.addSample(b);
 			error_a.addSample(a);
-			
-			if (compareNormal)
-			{
-				error_normal.addSample(c0, c1);
+
+            double l0 = luma(c0);
+            double l1 = luma(c1);
+
+            error_luma.addSample(l0 - l1);
+
+            double d = sqrt(r*r + g*g + b*b);
+
+			if (compareAlpha) {
+                d *= c0.a / 255.0;
 			}
 
-			if (compareAlpha)
-			{
-				error_total.addSample(r * c0.a / 255.0f);
-				error_total.addSample(g * c0.a / 255.0f);
-				error_total.addSample(b * c0.a / 255.0f);
-			}
-			else
-			{
-				error_total.addSample(r);
-				error_total.addSample(g);
-				error_total.addSample(b);
+            error_total.addSample(d);
+
+			if (compareNormal) {
+				error_normal.addSample(c0, c1);
 			}
 		}
 	}
@@ -264,6 +272,7 @@ int main(int argc, char *argv[])
 	error_g.done();
 	error_b.done();
 	error_a.done();
+    error_luma.done();
 	error_total.done();
 	error_normal.done();
 	
@@ -276,6 +285,9 @@ int main(int argc, char *argv[])
 
 	printf("Color:\n");
 	error_total.print();
+
+	printf("Luma:\n");
+	error_luma.print();
 
 	if (compareNormal)
 	{

@@ -2,7 +2,8 @@
 #error "Do not include this file directly."
 #endif
 
-#include <stdint.h> // uint8_t, int8_t, ...
+#include <stdint.h> // uint8_t, int8_t, ... uintptr_t
+#include <stddef.h> // operator new, size_t, NULL
 
 // Function linkage
 #define DLL_IMPORT
@@ -24,7 +25,7 @@
 #endif
 
 #define NV_FASTCALL		__attribute__((fastcall))
-#define NV_FORCEINLINE	__attribute__((always_inline))
+#define NV_FORCEINLINE	inline __attribute__((always_inline))
 #define NV_DEPRECATED   __attribute__((deprecated))
 
 #if __GNUC__ > 2
@@ -34,6 +35,8 @@
 #define NV_PURE
 #define NV_CONST
 #endif
+
+#define NV_NOINLINE __attribute__((noinline))
 
 // Define __FUNC__ properly.
 #if __STDC_VERSION__ < 199901L
@@ -48,7 +51,7 @@
 
 #define restrict    __restrict__
 
-
+/*
 // Type definitions
 typedef uint8_t     uint8;
 typedef int8_t      int8;
@@ -64,3 +67,4 @@ typedef int64_t     int64;
 
 // Aliases
 typedef uint32      uint;
+*/
