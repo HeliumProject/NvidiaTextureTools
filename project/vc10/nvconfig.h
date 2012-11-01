@@ -11,7 +11,7 @@
 #define HAVE_OPENMP
 #endif
 
-#define HAVE_STBIMAGE
+//#define HAVE_STBIMAGE
 /*#if !defined(_M_X64)
 //#define HAVE_FREEIMAGE
 #define HAVE_PNG

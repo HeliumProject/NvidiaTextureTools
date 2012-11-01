@@ -11,12 +11,12 @@
 #define HAVE_OPENMP
 #endif
 
+//#define HAVE_STBIMAGE
 /*#if !defined(_M_X64)
 //#define HAVE_FREEIMAGE
 #define HAVE_PNG
 #define HAVE_JPEG
 #define HAVE_TIFF
 #endif*/
-#define HAVE_STBIMAGE
 
 #endif // NV_CONFIG
