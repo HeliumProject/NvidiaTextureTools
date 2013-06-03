@@ -10,7 +10,7 @@
 /* #undef HAVE_OPENMP */
 #define HAVE_DISPATCH_H
 
-#define HAVE_STBIMAGE
+/*#define HAVE_STBIMAGE*/
 /* #undef HAVE_PNG */
 /* #undef HAVE_JPEG */
 /* #undef HAVE_TIFF */
