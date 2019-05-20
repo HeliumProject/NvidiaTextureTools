@@ -11,6 +11,7 @@
 // http://developer.apple.com/mac/library/documentation/Performance/Reference/GCD_libdispatch_Ref/Reference/reference.html
 #if NV_OS_DARWIN && defined(HAVE_DISPATCH_H)
 #define HAVE_GCD 1
+#define HAVE_UNISTD_H 1
 #include <dispatch/dispatch.h>
 #endif
 
